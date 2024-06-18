@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/Post');
+const Post = require('../models/blog');
 
 router.get('/',async (req, res) => {
    
@@ -16,13 +16,12 @@ router.get('/',async (req, res) => {
         
 
 
-        console.log("page: ",page);
+        
         const data = await  Post.aggregate([{ $sort: { createdAt: -1 } }])
         .skip(perPage * (page - 1))
         .limit(perPage)
         .exec();
 
-        console.log(data);
 
         const count = await Post.countDocuments();
         const nextPage = parseInt(page) + 1;
@@ -94,22 +93,6 @@ router.post('/search',async (req, res) => {
 
 });
 
-
-
-// router.get('/',async (req, res) => {
-//     const locals = {
-//         title: 'Home',
-//         description: 'Welcome to the home page'
-//     };
-
-//     try{
-//         const data = await Post.find().sort({createdAt: 'desc'});
-//         res.render('index',{locals,data});
-//     }catch(error){
-//         console.log(error.message);
-//     }
-
-// });
 
 
 module.exports = router;

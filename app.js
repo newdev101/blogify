@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000;
 //%    Database connection
 connectDB();
 
-//%   Body parser
+//todo   Body parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -33,10 +33,10 @@ app.use(session({
 }))
 
 
-//%    Static files
+//todo    Static files
 app.use(express.static('public'));
 
-//%    Template engine
+//todo    Template engine
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');

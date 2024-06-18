@@ -1,6 +1,6 @@
 <h3>SignIN </h3>
 
-<form action="/admin" method="post">
+<form action="/user/signin" method="post">
      <label for="username">
           <b>UserName</b>
      </label>
@@ -10,7 +10,8 @@
      name="username"
      >
 
-     <label for="username">
+
+     <label for="password">
           <b>Password</b>
      </label>
      <input 
@@ -24,9 +25,9 @@
 
 
 
-<!-- <h3>Register </h3>
+<h3>Register </h3>
 
-<form action="/register" method="post">
+<form action="/user/signup" method="post">
      <label for="username">
           <b>UserName</b>
      </label>
@@ -36,7 +37,17 @@
      name="username"
      >
 
-     <label for="username">
+
+     <label for="email">
+          <b>Email</b>
+     </label>
+     <input 
+     type="text" 
+     placeholder="name@gmail.com"
+     name="email"
+     >
+
+     <label for="password">
           <b>Password</b>
      </label>
      <input 
@@ -46,4 +57,4 @@
      >
 
      <input type="submit" value="Signup" class="btn">
-</form> -->
+</form>

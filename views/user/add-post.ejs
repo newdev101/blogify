@@ -4,11 +4,15 @@
 </div>
 
 <form 
-action="/add-post"
+action="/blog/add-blog"
 method="post"
+enctype="multipart/form-data"
 >
      <label for="title"><b>Title</b></label>
      <input type="text" placeholder="title.." name="title">
+
+     <label for="image"><b>blog Image</b></label>
+     <input type="file" name="coverImage">
 
 
      <label for="body"><b>Content</b></label>

@@ -11,15 +11,21 @@ const blogSchema = new Schema({
      },
      coverImageURL:{
           type: String,
-          required: false,
+          default: "/images/default-avator.png",
      },
      createdBy:{
           type: Schema.Types.ObjectId,
           ref: 'user',
      },
-},
-{timestamps:true}
-);
+     createdAt:{
+          type: Date,
+          default: Date.now
+     },
+     updatedAt:{
+          type: Date,
+          default: Date.now
+     }
+});
 
 const Blog = model('blog',blogSchema);
 

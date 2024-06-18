@@ -12,10 +12,24 @@
 
       <% data.forEach((post) => { %>
         <li>
-          <a href="/post/<%= post._id %>">
-            <span><%= post.title %></span>
-            <span class="article-list__date"><%= post.createdAt.toDateString() %></span>
-          </a>
+         
+          <div class="blog_container">
+            <!-- <a href="/post/<%= post._id %>">
+              <span><%= post.title %></span>
+              <span class="article-list__date"><%= post.createdAt.toDateString() %></span>
+            </a> -->
+            <div class="blog_image">
+              <img src="/uploads/1718738842041-neon pc wallpaper.jpg" alt="">
+            </div>
+            <div class="blog_content"> 
+              <div class="blog_content_info">
+                <h2><%= post.title %></h2>
+                <span class="article-list__date"><%= post.createdAt.toDateString() %></span>
+              </div>
+                <p><%= post.body %></p>
+                <a href="/blog/<%= post._id %>" class="read_more btn">Read more</a>
+            </div>
+          </div>
         </li>
 
       <% }) %>
