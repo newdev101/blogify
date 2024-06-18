@@ -2,12 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const methodOverride = require('method-override')
-const mainRoutes = require('./server/routes/main.js');
-const adminRoutes = require('./server/routes/admin.js')
+const blogRoutes = require('./routes/blog.js');
+const userRoutes = require('./routes/user.js')
+const homeRoute = require('./routes/home.js')
 const cookieParser = require('cookie-parser');
 const MongooseStore = require('connect-mongo')
 
-const connectDB = require('./server/config/db.js');
+const connectDB = require('./config/db.js');
 const session = require('express-session');
 
 const app = express();
@@ -40,7 +41,10 @@ app.use(expressLayouts);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
 
-app.use('/', mainRoutes);
-app.use('/',adminRoutes);
+
+//todo%%%%%%%%    Routes    %%%%%%%%%%%%%
+app.use('/user',userRoutes);
+app.use('/blog', blogRoutes);
+app.use('/',homeRoute);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`));
