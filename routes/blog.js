@@ -12,12 +12,9 @@ const userLayout = '../views/layouts/user';
 
 
 
-//! Middleware
-
-
 
 //todo  %%%%%%%%%%  ADD NEW BLOG PAGE  %%%%%%%%%%%%%
-router.get('/add-blog',async (req,res)=>{
+router.get('/add-blog',authMiddleware,async (req,res)=>{
      const locals = {
          title: 'Add Blog',
          description: "it's Add post page"
@@ -36,19 +33,17 @@ router.get('/add-blog',async (req,res)=>{
  
  
 //todo  %%%%%%%%%%  ADD NEW BLOG (API)  %%%%%%%%%%%%%
-
-
-
  router.post('/add-blog',authMiddleware,upload.single('coverImage'),async (req,res)=>{
      
      try{
-
          const newBlog = new Blog({
              title:req.body.title,
              body:req.body.body,
              createdBy:req.userId,
-             coverImageURL:req.file?`/uploads/${req.file.filename}`:"/images/default-avator.png",
+             coverImageURL:req.file?`/uploads/${req.file.filename}`:"/images/default-blog.jpg",
          });
+
+
          await Blog.create(newBlog);
          res.redirect('/')
         
@@ -56,31 +51,57 @@ router.get('/add-blog',async (req,res)=>{
          console.log(error.message);
      }
  })
+
+//todo  %%%%%%%%%%  show BLOG  %%%%%%%%%%%%%
+router.get('/:id',async (req,res)=>{
+    
+    try{
+
+        const data=await Blog.findOne({_id:req.params.id});
+        let created_by = await User.findOne({_id:data.createdBy});
+        created_by = created_by.username;
+        console.log("data "+data);
+        console.log("created_by "+created_by);
+        const locals = {
+            title: data.title,
+            description: "it's Blog page"
+        };
+
+        res.render('blog',{
+            locals,
+            data,
+            created_by
+        });
+
+    }catch(error){
+        console.log(error.message);
+    }
+})
+
  
- 
- router.get('/edit-post/:id',authMiddleware,async (req,res)=>{
+//todo  %%%%%%%%%%  EDIT BLOG page  %%%%%%%%%%%%%
+ router.get('/edit-blog/:id',authMiddleware,async (req,res)=>{
     
      try{
          const locals = {
              title: 'Edit Blog',
              description: "it's Edit post page"
          };
- 
- 
- 
          const data=await Blog.findOne({_id:req.params.id});
-         res.render('admin/edit-post',{
+         res.render('user/edit-blog',{
              locals,
              data,
-             layout:adminLayout
+             layout:userLayout
          });
  
      }catch(error){
          console.log(error.message);
      }
  })
- 
- router.put('/edit-post/:id',authMiddleware,async (req,res)=>{
+
+
+//todo  %%%%%%%%%%  edit BLOG (api)  %%%%%%%%%%%%%
+ router.put('/edit-blog/:id',authMiddleware,async (req,res)=>{
      const locals = {
          title: 'Edit Blog',
          description: "it's Edit post page"
@@ -93,7 +114,7 @@ router.get('/add-blog',async (req,res)=>{
              updatedAt: Date.now()
          })
          console.log("edit successful");
-         res.redirect('/edit-post/'+req.params.id);
+         res.redirect('/blog/edit-blog/'+req.params.id);
  
      }catch(error){
          console.log("edit failed");
@@ -102,15 +123,15 @@ router.get('/add-blog',async (req,res)=>{
  })
  
  
- 
- router.delete('/delete-post/:id',authMiddleware,async (req,res)=>{
- 
+//todo  %%%%%%%%%%  DELETE BLOG (API)  %%%%%%%%%%%%%
+ router.delete('/delete-blog/:id',authMiddleware,async (req,res)=>{
      try{
          await Blog.deleteOne({_id:req.params.id});
-         res.redirect('/dashboard/');
+         res.redirect('/user/dashboard/');
  
      }catch(error){
          console.log(error.message);
+         res.redirect('/user/dashboard/');
      }
  })
 

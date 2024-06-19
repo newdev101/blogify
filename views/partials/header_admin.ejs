@@ -10,15 +10,38 @@
                     <a href="/about" class="">about</a>
                </li>
                <li>
-                    <a href="/dashboard" class="">Dashboard</a>
+                    <a href="/user/dashboard" class="">Dashboard</a>
                </li>
           </ul>
      </nav>
 
      <div class="header__button">
-          <a href="/logout"> 
-               Logout
-          </a>
+          <% if (locals.title=="Signup") { %>
+               <a href="/user/signin"> 
+                    Signin
+               </a>
+          <% } %>
+          <% if (locals.title=="Signin") { %>
+               <a href="/user/signup"> 
+                    Signup
+               </a>
+          <% } %>
+
+          <% if (locals.title=="Add Blog" || locals.title=="Dashboard" || locals.title=="Edit Blog") { %>
+               <a href="/user/logout"> 
+                    Logout
+               </a>
+          <% } %>
+          
+
+         
+<!--           
+               <a href="/user/signin"> 
+                    Signin
+               </a>
+       -->
+
+
      </div>
 
 </header>

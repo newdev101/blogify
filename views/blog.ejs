@@ -1,0 +1,19 @@
+<div class="main_blog_container">
+
+     <div class="cover_image">
+          <img src=<%=data.coverImageURL %> alt="cover_image">
+     </div>
+     <div class="blog_meta_data">
+          <h1 class="blog_title">
+               <%= data.title %>
+          </h1>
+          <p>
+               <%= data.createdAt.toDateString() %>
+          </p>
+
+     </div>
+     <p class="blog_author">By <%= created_by %>&#46;</p>
+
+     <article class="article blog_body"><%= data.body %>
+     </article>
+</div>

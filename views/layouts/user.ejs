@@ -7,15 +7,28 @@
      <meta name="description" content="<%= locals.description %>">
      <link rel="stylesheet" href="/css/style.css">
      <script type="text/javascript" defer src="/js/script.js"></script>
+
+     <style>
+          .container {
+               display: flex;
+               flex-direction: column;
+               justify-content: space-between;
+               min-height: 100vh;
+          }
+
+          
+         
+     </style>
 </head>
 <body>
 
      <div class="container">
-
-          <%- include('../partials/header_admin.ejs') %>
-          <main class="main">
-               <%- body %>
-          </main>
+          <div>
+               <%- include('../partials/header_admin.ejs') %>
+               <main class="main dashboard_body">
+                    <%- body %>
+               </main>
+          </div>
           <%- include('../partials/footer.ejs') %>
 
      </div>

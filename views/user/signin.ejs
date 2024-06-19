@@ -1,0 +1,36 @@
+<div id="signin_container">
+     <h3>SignIN </h3>
+
+     <% if (locals.warning ) { %>
+          <div class="warning_block">
+               <h3>Invalid credentials</h3>
+          </div>
+     <% } %>
+     
+     <form action="/user/signin" method="post">
+          <label for="username">
+               <b>UserName</b>
+          </label>
+          <input 
+          type="text" 
+          placeholder="username.."
+          name="username"
+          >
+     
+     
+          <label for="password">
+               <b>Password</b>
+          </label>
+          <input 
+          type="password" 
+          placeholder="enter password"
+          name="password"
+          >
+     
+          <input type="submit" value="Login" class="btn">
+     </form>
+
+</div>
+
+
+

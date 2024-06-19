@@ -19,7 +19,10 @@
               <span class="article-list__date"><%= post.createdAt.toDateString() %></span>
             </a> -->
             <div class="blog_image">
-              <img src="/uploads/1718738842041-neon pc wallpaper.jpg" alt="">
+              <!-- <img src="/uploads/1718738842041-neon pc wallpaper.jpg" alt=""> -->
+        <% let image_url= post.coverImageURL %>
+              
+              <img src=<%= image_url %> alt="">
             </div>
             <div class="blog_content"> 
               <div class="blog_content_info">

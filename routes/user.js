@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const authMiddleware = require('../middleware/auth.js');
 const Post = require('../models/blog');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
@@ -11,34 +11,33 @@ const userLayout = '../views/layouts/user';
 
 
 
-//! Middleware
 
-const authMiddleware = (req, res, next)=>{
-    const token = req.cookies.token;
-    if(!token){
-        return res.status(401).json({message:'unauthorized'});
-    }
-    try{
-            const decoded = jwt.verify(token,process.env.JWT_SECRET);
-            req.userId = decoded.userId;
-            next();
-    }catch(error){
-            res.status(401).json({message:'unauthorized'});
-    }
-}
-
-
-
-//todo  %%%%%%%%%%  SIGNUP &  LOGIN PAGE  %%%%%%%%%%%%%
-router.get('/',async (req, res) => {
+//todo  %%%%%%%%%%  SIGNUP &  SIGNIN PAGE  %%%%%%%%%%%%%
+router.get('/signin',async (req, res) => {
 
     const locals = {
-        title: 'User',
+        title: 'Signin',
         description: "it's the User page"
     };
 
     try{
-        res.render('user/index',{locals, layout:userLayout});
+        res.render('user/signin',{locals, layout:userLayout});
+    }catch(error){
+        console.log(error.message);
+    }
+
+});
+
+
+router.get('/signup',async (req, res) => {
+
+    const locals = {
+        title: 'Signup',
+        description: "it's the User page"
+    };
+
+    try{
+        res.render('user/signup',{locals, layout:userLayout});
     }catch(error){
         console.log(error.message);
     }
@@ -55,7 +54,7 @@ router.post('/signup',async (req, res) => {
  
          try{
            const user = await User.create({username,email,password:hashedPassword})
-           return res.redirect("/");
+           return res.redirect("/user/signin");
          }catch(error){
            if(error.code === 11000){
                 res.status(409).json({message:'user already exist'});
@@ -63,32 +62,43 @@ router.post('/signup',async (req, res) => {
            res.status(500).json("enternal server error");
          }
  
-         return res.redirect('/user');
+         return res.redirect('/user/signin');
      }catch(error){
          console.log(error.message);
      }
  
  });
 
+
+
 //todo  %%%%%%%%%%  SIGNIN API  %%%%%%%%%%%%%
 
 router.post('/signin',async (req, res) => {
+
+    const locals = {
+        title: 'Signin',
+        description: "it's the User page",
+        warning: 1
+    };
+
    
     try{
         const {username, password} = req.body;
         const user = await User.findOne({username});
         if(!user){
-            return res.status(401).json({message:'invalid credentials'});
+            res.render('user/signin',{locals, layout:userLayout});
+            // return res.status(401).json({message:'invalid credentials'});
         }
 
         const isPasswordValid = await bcrypt.compare(password,user.password);
         if(!isPasswordValid){
-            return res.status(401).json({message:'invalid credentials'});
+            res.render('user/signin',{locals, layout:userLayout});
+            // return res.status(401).json({message:'invalid credentials'});
         }
 
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET);
-        res.cookie('token',token,{httpOnly:true});
-        res.redirect('/')
+        res.cookie('blogify-token',token,{httpOnly:true});
+        res.redirect('/user/dashboard')
 
 
     }catch(error){
@@ -98,6 +108,8 @@ router.post('/signin',async (req, res) => {
 });
 
 
+
+//todo%%%%%%%%%%  Dashboard page  %%%%%%%%%%%%%
 router.get('/dashboard',authMiddleware,async (req,res)=>{
     const locals = {
         title: 'Dashboard',
@@ -105,8 +117,8 @@ router.get('/dashboard',authMiddleware,async (req,res)=>{
     };
 
     try{
-        const data = await Post.find();
-        res.render('admin/dashboard',{locals, data, layout:adminLayout});
+        const data = await Post.find({createdBy:req.userId});
+        res.render('user/dashboard',{locals, data, layout:userLayout});
     }catch(error){
         console.log(error.message);
     }
@@ -114,10 +126,10 @@ router.get('/dashboard',authMiddleware,async (req,res)=>{
 
 
 
-
+//todo%%%%%%%%%%  user logout  %%%%%%%%%%%%%
 router.get('/logout',authMiddleware,async (req,res)=>{
-    res.clearCookie('token');
-    res.redirect('/admin');
+    res.clearCookie('blogify-token');
+    res.redirect('/user/signin');
 })
 
 
